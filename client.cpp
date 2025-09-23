@@ -6,12 +6,13 @@
     Date: 2/8/20
 	
 	Please include your Name, UIN, and the date below
-	Name:
-	UIN:
-	Date:
+	Name: Haihua Pei
+	UIN: 333005716
+	Date: 09/23/2025
 */
 #include "common.h"
 #include "FIFORequestChannel.h"
+#include <sys/wait.h>
 
 using namespace std;
 
@@ -40,6 +41,26 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
+	// Start fork so that server is running from client
+
+	int status; 
+	pid_t pid = fork();
+
+	if (pid == -1){
+		cout << "Fork Failed. \n";
+		return 1;
+	}
+
+	if (pid == 0) {
+
+		cout << "Fork Successful. \n";
+
+		// You can add "-m buffer_size" to increase buffer size
+		execlp("server.cpp", nullptr);
+	}
+
+
+
     FIFORequestChannel chan("control", FIFORequestChannel::CLIENT_SIDE);
 	
 	// example data point request
@@ -67,4 +88,6 @@ int main (int argc, char *argv[]) {
 	// closing the channel    
     MESSAGE_TYPE m = QUIT_MSG;
     chan.cwrite(&m, sizeof(MESSAGE_TYPE));
+
+	wait(&status);
 }
