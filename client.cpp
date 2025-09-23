@@ -56,7 +56,7 @@ int main (int argc, char *argv[]) {
 		cout << "Fork Successful. \n";
 
 		// You can add "-m buffer_size" to increase buffer size
-		execlp("server.cpp", nullptr);
+		execl("server.cpp", "server", NULL);
 	}
 
 
